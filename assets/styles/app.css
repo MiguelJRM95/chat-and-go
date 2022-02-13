@@ -1,0 +1,32 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: lightgray;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+header {
+  position: absolute;
+  top: 2vh;
+}
+
+.app-container {
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  gap: 4em;
+}
+
+#root {
+  width: 100%;
+}

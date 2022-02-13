@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block title %}Chat & Go{% endblock %}
+{% block body %}
+<header id="header">
+    <h1>Chat & Go</h1>
+</header>
+<div class="app-container">
+    <nav id="navigation">
+        <ul>
+            <li><a id="perfil" href="#">Perfil</a></li>
+            <li id="rooms">Rooms</li>
+            <li id="amigos">Amigos</li>
+        </ul>
+    </nav>
+    <div id="root"></div>
+</div>
+<template id="template-content">
+    <div>Hello</div>
+    <button class="pressable">Click</button>
+</template>
+{% endblock %}
