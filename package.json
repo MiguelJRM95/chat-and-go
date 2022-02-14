@@ -16,6 +16,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "html-webpack-plugin": "^5.5.0"
+        "html-webpack-plugin": "^5.5.0",
+        "jquery": "^3.6.0"
     }
 }
