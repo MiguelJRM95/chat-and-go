@@ -3,14 +3,15 @@
 namespace App\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\UsuarioRepository;
 use App\Repository\PerfilRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-/*
-* @Route(path="/api/")
-*/
+/**
+ * @Route("/api", name="user_api")
+ */
 class UsuarioController extends AbstractController
 {
     private $usuarioRepository;
@@ -23,14 +24,13 @@ class UsuarioController extends AbstractController
     }
 
 
-    
-    /*
-    * @Route(path="update_profile/{user_id}", name="update_profile", methods={"PUT"} )
-    */
+
+    /** 
+     * @Route("/update_profile/{user_id}", name="update_profile", methods={"PUT"} )
+     */
     public function updatePerfil(Request $req): JsonResponse
     {
 
-        return new JsonResponse();
+        return new JsonResponse('hello');
     }
-    
 }
