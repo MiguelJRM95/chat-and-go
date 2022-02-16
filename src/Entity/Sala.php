@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SalaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,16 +17,19 @@ class Sala
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"sala", "usuario"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"sala", "usuario"})
      */
     private $nombre_sala;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default":1})
+     * @Groups({"sala", "usuario"})
      */
     private $estado;
 
@@ -36,6 +40,7 @@ class Sala
 
     /**
      * @ORM\OneToMany(targetEntity=Mensaje::class, mappedBy="sala", orphanRemoval=true)
+     * @Groups({"sala", "usuario"})
      */
     private $mensajes;
 
@@ -76,6 +81,7 @@ class Sala
 
     /**
      * @return Collection|Usuario[]
+     * @Groups({"sala"})
      */
     public function getUsuarios(): Collection
     {

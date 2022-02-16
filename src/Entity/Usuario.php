@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,11 +18,13 @@ class Usuario implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"usuario","sala"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups({"usuario","sala"})
      */
     private $username;
 
@@ -49,6 +52,7 @@ class Usuario implements UserInterface
     /**
      * @ORM\ManyToMany(targetEntity=Sala::class, inversedBy="usuarios")
      * @ORM\JoinTable(name="usuarios_salas")
+     * @Groups({"usuario"})
      */
     private $salas;
 
@@ -231,6 +235,7 @@ class Usuario implements UserInterface
 
     /**
      * @return Collection|Sala[]
+     * @Groups({"usuario","salas"})
      */
     public function getSalas(): Collection
     {

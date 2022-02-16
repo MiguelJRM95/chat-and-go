@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220214073723 extends AbstractMigration
+final class Version20220216185607 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -23,7 +23,7 @@ final class Version20220214073723 extends AbstractMigration
         $this->addSql('CREATE TABLE mensaje (id INT AUTO_INCREMENT NOT NULL, usuario_emisor_id INT NOT NULL, usuario_receptor_id INT NOT NULL, sala_id INT NOT NULL, contenido VARCHAR(255) NOT NULL, fecha VARCHAR(255) NOT NULL, tipo VARCHAR(255) NOT NULL, INDEX IDX_9B631D01E2E46DCD (usuario_emisor_id), INDEX IDX_9B631D01467F8F (usuario_receptor_id), INDEX IDX_9B631D01C51CDF3F (sala_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE perfil (id INT AUTO_INCREMENT NOT NULL, nombre VARCHAR(255) DEFAULT NULL, apellido_uno VARCHAR(255) DEFAULT NULL, apellido_dos VARCHAR(255) DEFAULT NULL, frase_estado VARCHAR(150) DEFAULT NULL, avatar VARCHAR(255) NOT NULL, direccion VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE peticion (id INT AUTO_INCREMENT NOT NULL, usuario_receptor_id INT NOT NULL, usuario_emisor_id INT NOT NULL, estado TINYINT(1) NOT NULL, INDEX IDX_3297E425467F8F (usuario_receptor_id), INDEX IDX_3297E425E2E46DCD (usuario_emisor_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE sala (id INT AUTO_INCREMENT NOT NULL, nombre_sala VARCHAR(255) NOT NULL, estado TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE sala (id INT AUTO_INCREMENT NOT NULL, nombre_sala VARCHAR(255) NOT NULL, estado TINYINT(1) DEFAULT 1 NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE usuario (id INT AUTO_INCREMENT NOT NULL, perfil_id INT NOT NULL, username VARCHAR(180) NOT NULL, roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', password VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_2265B05DF85E0677 (username), UNIQUE INDEX UNIQ_2265B05D57291544 (perfil_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE usuarios_salas (usuario_id INT NOT NULL, sala_id INT NOT NULL, INDEX IDX_77DAE93DDB38439E (usuario_id), INDEX IDX_77DAE93DC51CDF3F (sala_id), PRIMARY KEY(usuario_id, sala_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE amigos (usuario_id INT NOT NULL, amigo_usuario_id INT NOT NULL, INDEX IDX_3317FC62DB38439E (usuario_id), INDEX IDX_3317FC621D9B3DB0 (amigo_usuario_id), PRIMARY KEY(usuario_id, amigo_usuario_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
