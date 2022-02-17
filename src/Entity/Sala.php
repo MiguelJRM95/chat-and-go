@@ -35,6 +35,7 @@ class Sala
 
     /**
      * @ORM\ManyToMany(targetEntity=Usuario::class, mappedBy="salas")
+     * @ORM\JoinTable(name="usuarios_salas")
      */
     private $usuarios;
 
