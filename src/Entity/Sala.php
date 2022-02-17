@@ -28,10 +28,10 @@ class Sala
     private $nombre_sala;
 
     /**
-     * @ORM\Column(type="boolean", options={"default":1})
+     * @ORM\Column(type="boolean", nullable=true, options={"default":1})
      * @Groups({"sala", "usuario"})
      */
-    private $estado;
+    private $estado = 1;
 
     /**
      * @ORM\ManyToMany(targetEntity=Usuario::class, mappedBy="salas")
