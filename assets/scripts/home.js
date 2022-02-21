@@ -1,6 +1,9 @@
 import $ from "jquery";
 
-console.log($(".pressable"));
-$(".pressable").on("click", () => {
+$(document).on("click", ".pressable", () => {
   console.log("hello");
+});
+
+$("#content").on("DOMSubtreeModified", () => {
+  console.log("cargada");
 });
