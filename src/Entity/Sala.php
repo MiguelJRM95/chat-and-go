@@ -31,7 +31,7 @@ class Sala
      * @ORM\Column(type="boolean", nullable=true, options={"default":1})
      * @Groups({"sala", "usuario"})
      */
-    private $estado = 1;
+    private $estado;
 
     /**
      * @ORM\ManyToMany(targetEntity=Usuario::class, mappedBy="salas")
@@ -49,6 +49,7 @@ class Sala
     {
         $this->usuarios = new ArrayCollection();
         $this->mensajes = new ArrayCollection();
+        $this->estado = 1;
     }
 
     public function getId(): ?int

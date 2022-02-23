@@ -1,0 +1,10 @@
+App\Entity\Sala:
+  properties:
+    nombre_sala:
+      - NotBlank:
+          message: "No puedes dejar el nombre de la sala en blanco"
+      - Length:
+          min: 2
+          max: 50
+          minMessage: "El nombre de la sala ha de ser al menos de {{ limit }} caracteres de longitud"
+          maxMessage: "El nombre de la sala no puede contener mas de {{ limit }} caracteres"

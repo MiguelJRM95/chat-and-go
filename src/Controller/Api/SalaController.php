@@ -2,9 +2,12 @@
 
 namespace App\Controller\Api;
 
+use App\Controller\Services\FormHandler;
 use App\Entity\Sala;
 use App\Repository\SalaRepository;
 use App\Repository\UsuarioRepository;
+use App\Form\Type\SalaFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -62,11 +65,14 @@ class SalaController extends AbstractController
     /** 
      * @Route("/salas_usuario/add", name="crear_sala", methods={"POST"} )
      */
-    public function createSala(Request $req, UsuarioRepository $usuarioRepository, SerializerInterface $serializer): JsonResponse
+    public function createSala(Request $req, UsuarioRepository $usuarioRepository, SerializerInterface $serializer, EntityManagerInterface $em, FormHandler $formHandler): JsonResponse
     {
-        $data = json_decode($req->getContent());
+        $data = json_decode($req->getContent(), true);
 
-        $usuario = $usuarioRepository->findOneBy(["id" => $data->usuario_id]);
+        //$usuario = $this->getUser();
+
+        //$usuario = $usuarioRepository->findOneBy(["id" => $data->usuario_id]);
+        $usuario = $usuarioRepository->findOneBy(["id" => 1]);
 
         if ($usuario === null) {
             return new JsonResponse(
@@ -75,23 +81,49 @@ class SalaController extends AbstractController
             );
         }
 
-        try {
-            $sala = new Sala();
+        $sala = new Sala();
 
-            $sala->setNombreSala($data->nombre_sala);
+        $form = $this->createForm(SalaFormType::class, $sala);
+        $parsedData = $formHandler->parseData($form, $data);
+        $form->submit($parsedData);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $sala->addUsuario($usuario);
             $usuario->addSala($sala);
-            $em = $this->getDoctrine()->getManager();
             $em->persist($sala);
             $em->flush();
-
             return JsonResponse::fromJsonString($serializer->serialize($sala, 'json', ['groups' => ['sala']]), Response::HTTP_CREATED);
-        } catch (\Throwable $throwable) {
-            return new JsonResponse(
-                ["error" => "No se ha podido crear la sala"],
-                Response::HTTP_BAD_REQUEST
-            );
         }
+
+        $errors = $formHandler->getErrorsFromForm($form);
+        return new JsonResponse(
+            [
+                "mensaje" => "No se ha podido crear la sala",
+                "erores" => $errors
+            ],
+            Response::HTTP_BAD_REQUEST
+        );
+
+        // try {
+        //     $sala = new Sala();
+        //     $sala->setNombreSala($data->nombre_sala);
+        //     $sala->addUsuario($usuario);
+        //     $usuario->addSala($sala);
+        //     $em = $this->getDoctrine()->getManager();
+        //     $em->persist($sala);
+        //     $em->flush();
+        // $string = (string) $form->getErrors(true, false);
+        // print_r(explode(':', $string)[2]);
+        // print_r($errors);
+        //     return JsonResponse::fromJsonString($serializer->serialize($sala, 'json', ['groups' => ['sala']]), Response::HTTP_CREATED);
+        // } catch (\Throwable $throwable) {
+        // return new JsonResponse(
+        //     [
+        //         "mensaje" => "No se ha podido crear la sala"
+        //     ],
+        //     Response::HTTP_BAD_REQUEST
+        // );
+        // }
     }
 
     /** 
