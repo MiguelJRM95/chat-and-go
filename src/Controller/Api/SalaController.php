@@ -99,7 +99,7 @@ class SalaController extends AbstractController
         return new JsonResponse(
             [
                 "mensaje" => "No se ha podido crear la sala",
-                "erores" => $errors
+                "errores" => $errors
             ],
             Response::HTTP_BAD_REQUEST
         );
