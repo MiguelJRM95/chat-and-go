@@ -1,5 +1,11 @@
+*,
+*::after,
+*::before {
+  font-family: "Poppins", sans-serif;
+}
+
 body {
-  background-color: #EEE;
+  background-color: #eee;
 }
 
 header {
@@ -40,7 +46,7 @@ button {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
-  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
   background-color: #f06060;
   box-shadow: 0px 3px 0px 0px #cd1313;
   text-decoration: none;
@@ -84,4 +90,39 @@ button:active {
   max-width: 80%;
   text-align: center;
   margin: 40px auto;
+}
+
+#login-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #1364cd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#form-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#form-container form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+#form-container form button {
+  width: 150px;
+  align-self: center;
+}
+
+.form-link {
+  margin-top: 10px;
+  color: #fff;
 }

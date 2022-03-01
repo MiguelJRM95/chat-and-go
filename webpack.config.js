@@ -45,6 +45,7 @@ Encore
   // but, you probably want this, unless you're building a single-page app
   .enableSingleRuntimeChunk()
   .addEntry("home", "./assets/scripts/home.js")
+  .addEntry("login", "./assets/controllers/login.js")
 
   /*
    * FEATURE CONFIG
