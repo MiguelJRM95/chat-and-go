@@ -63,7 +63,6 @@ class SalaController extends AbstractController
      */
     public function salas(SerializerInterface $serializer): JsonResponse
     {
-
         try {
             return JsonResponse::fromJsonString($serializer->serialize($this->getUser()->getSalas(), 'json', ['groups' => ['sala']]), Response::HTTP_OK);
         } catch (\Throwable $throwable) {

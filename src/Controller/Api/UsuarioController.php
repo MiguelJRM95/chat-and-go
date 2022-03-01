@@ -16,6 +16,8 @@ class UsuarioController extends AbstractController
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * ++++++++++++++++++ACTUALIZA EL PERFIL DEL USUARIO+++++++++++++++++++
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * +++++++++++SI NO ESTA VERIFICADO NO DEJAR EDITAR EN CLIENTE+++++++++
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * @Route("/update_profile", name="actualizar_perfil", methods={"PUT"} )
      */
     public function updatePerfil(Request $req): JsonResponse
