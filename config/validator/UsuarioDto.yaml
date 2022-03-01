@@ -1,0 +1,23 @@
+App\Form\Model\UsuarioDto:
+  properties:
+    username:
+      - NotBlank:
+          message: "El campo usuario no puede estar vacio."
+      - Length:
+          min: 3
+          max: 50
+          minMessage: "El campo usuario no puede tener menos de {{ limit }} carácteres."
+          maxMessage: "El campo usuario no puede tener mas de {{ limit }} carácteres."
+          allowEmptyString: false
+    password:
+      - NotBlank:
+          message: "La contraseña no puede estar vacia."
+      - Length:
+          min: 8
+          max: 50
+          minMessage: "La contraseña no puede tener menos de {{ limit }} carácteres."
+          maxMessage: "La contraseña no puede tener mas de {{ limit }} carácteres."
+          allowEmptyString: false
+    email:
+      - Email:
+          message: "El email {{ value }} no es un email válido."

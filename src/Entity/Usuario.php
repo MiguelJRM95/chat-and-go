@@ -24,9 +24,15 @@ class Usuario implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"usuario","sala"})
+     * @Groups({"usuario","sala", "mensaje", "mensaje_recibido","mensaje_enviado"})
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="boolean")
+     * @Groups({"usuario","sala"})
+     */
+    private $is_active;
 
     /**
      * @ORM\Column(type="json")
@@ -41,18 +47,20 @@ class Usuario implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Mensaje::class, mappedBy="usuario_emisor", orphanRemoval=true)
+     * @Groups({"mensaje_enviado"})
      */
     private $mensajes_enviados;
 
     /**
      * @ORM\OneToMany(targetEntity=Mensaje::class, mappedBy="usuario_receptor", orphanRemoval=true)
+     * @Groups({"mensaje_recibido"})
      */
     private $mensajes_recibidos;
 
     /**
      * @ORM\ManyToMany(targetEntity=Sala::class, inversedBy="usuarios")
      * @ORM\JoinTable(name="usuarios_salas")
-     * @Groups({"usuario"})
+     * @Groups({"usuario", "mensaje" })
      */
     private $salas;
 
@@ -71,8 +79,9 @@ class Usuario implements UserInterface
     private $amigos_conmigo;
 
     /**
-     * @ORM\OneToOne(targetEntity=Perfil::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Perfil::class, orphanRemoval=true)
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"usuario"})
      */
     private $perfil;
 
@@ -95,6 +104,7 @@ class Usuario implements UserInterface
         $this->amigos_conmigo = new ArrayCollection();
         $this->peticiones_recibidas = new ArrayCollection();
         $this->peticiones_enviadas = new ArrayCollection();
+        $this->is_active = false;
     }
 
     public function getId(): ?int
@@ -115,6 +125,22 @@ class Usuario implements UserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * A identifier for validate the user.
+     *
+     */
+    public function getIsActive(): bool
+    {
+        return (bool) $this->is_active;
+    }
+
+    public function setIsActive(bool $is_active): self
+    {
+        $this->is_active = $is_active;
 
         return $this;
     }

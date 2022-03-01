@@ -23,7 +23,7 @@ class Sala
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"sala", "usuario"})
+     * @Groups({"sala", "usuario", "mensaje", "mensaje_recibido"})
      */
     private $nombre_sala;
 
@@ -41,7 +41,7 @@ class Sala
 
     /**
      * @ORM\OneToMany(targetEntity=Mensaje::class, mappedBy="sala", orphanRemoval=true)
-     * @Groups({"sala", "usuario"})
+     * @Groups({"sala", "usuario", "mensaje_recibido"})
      */
     private $mensajes;
 

@@ -15,45 +15,46 @@ class Mensaje
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"sala", "usuario"})
+     * @Groups({"sala", "usuario", "mensaje"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"sala", "usuario"})
+     * @Groups({"sala", "usuario", "mensaje" , "mensaje_recibido", "mensaje_enviado"})
      */
     private $contenido;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"sala", "usuario"})
+     * @Groups({"sala", "usuario", "mensaje" , "mensaje_recibido", "mensaje_enviado"})
      */
     private $fecha;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"sala", "usuario"})
+     * @Groups({"sala", "usuario", "mensaje" , "mensaje_recibido", "mensaje_enviado"})
      */
     private $tipo;
 
     /**
      * @ORM\ManyToOne(targetEntity=Usuario::class, inversedBy="mensajes_enviados")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"sala"})
+     * @Groups({"sala", "mensaje", "mensaje_recibido"})
      */
     private $usuario_emisor;
 
     /**
      * @ORM\ManyToOne(targetEntity=Usuario::class, inversedBy="mensajes_recibidos")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"sala"})
+     * @Groups({"sala", "mensaje","mensaje_enviado"})
      */
     private $usuario_receptor;
 
     /**
      * @ORM\ManyToOne(targetEntity=Sala::class, inversedBy="mensajes")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"mensaje"})
      */
     private $sala;
 

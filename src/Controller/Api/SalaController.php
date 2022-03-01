@@ -3,7 +3,9 @@
 namespace App\Controller\Api;
 
 use App\Controller\Services\FormHandler;
+use App\Controller\Services\SalaHandler;
 use App\Entity\Sala;
+use App\Entity\Usuario;
 use App\Repository\SalaRepository;
 use App\Repository\UsuarioRepository;
 use App\Form\Type\SalaFormType;
@@ -20,14 +22,31 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class SalaController extends AbstractController
 {
-    /** 
-     * @Route("/salas_usuario/{usuario_id}", name="salas_usuario", methods={"GET"}, requirements={"usuario_id"="\d+"} )
-     */
-    public function salas(Request $req, UsuarioRepository $usuarioRepository, SerializerInterface $serializer): JsonResponse
+    private $salaHandler;
+
+    public function __construct(SalaHandler $salaHandler)
     {
+        $this->salaHandler = $salaHandler;
+    }
+
+    /** 
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * ++++++LISTA TODAS LAS SALAS (solo admin)++++++++++++++++++++++++++++++
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @Route("/salas", name="salas", methods={"GET"})
+     */
+    public function salasAll(SalaRepository $salaRepository, SerializerInterface $serializer): JsonResponse
+    {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return new JsonResponse(
+                ["error" => "Solo los administradores pueden ver todas las salas"],
+                Response::HTTP_FORBIDDEN
+            );
+        }
+
         try {
-            $usuario = $usuarioRepository->findOneBy(["id" => $req->get('usuario_id')]);
-            return JsonResponse::fromJsonString($serializer->serialize($usuario->getSalas(), 'json', ['groups' => ['sala']]), Response::HTTP_OK);
+            $salas = $salaRepository->findAll();
+            return JsonResponse::fromJsonString($serializer->serialize($salas, 'json', ['groups' => ['sala']]), Response::HTTP_OK);
         } catch (\Throwable $throwable) {
             return new JsonResponse(
                 ["error" => "El usuario no existe"],
@@ -37,10 +56,39 @@ class SalaController extends AbstractController
     }
 
     /** 
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * ++++++LISTA LAS SALAS A LAS CUALES PERTENECE EL USUARIO LOGEADO+++++++
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @Route("/salas_usuario", name="salas_usuario", methods={"GET"})
+     */
+    public function salas(SerializerInterface $serializer): JsonResponse
+    {
+
+        try {
+            return JsonResponse::fromJsonString($serializer->serialize($this->getUser()->getSalas(), 'json', ['groups' => ['sala']]), Response::HTTP_OK);
+        } catch (\Throwable $throwable) {
+            return new JsonResponse(
+                ["error" => "El usuario no existe"],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+    }
+
+    /** 
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * ++++++ELIMINA UNA SALA (solo admin)+++++++++++++++++++++++++++++++++++
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * @Route("/salas_usuario/{sala_id}", name="eliminar_sala", methods={"DELETE"}, requirements={"sala_id"="\d+"} )
      */
     public function removeSala(Request $req, SalaRepository $salaRepository): JsonResponse
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            return new JsonResponse(
+                ["error" => "Solo los administradores pueden eliminar las salas"],
+                Response::HTTP_FORBIDDEN
+            );
+        }
+
         try {
             $sala = $salaRepository->findOneBy(["id" => $req->get("sala_id")]);
             $sala_id = $sala->getId();
@@ -62,17 +110,60 @@ class SalaController extends AbstractController
         }
     }
 
+
     /** 
-     * @Route("/salas_usuario/add", name="crear_sala", methods={"POST"} )
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * ++++++ELIMINA EL USUARIO LOGUEADO DE LA SALA++++++++++++++++++++++++++
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @Route("/salas_usuario/remove", name="eliminar_from_sala", methods={"PUT"})
      */
-    public function createSala(Request $req, UsuarioRepository $usuarioRepository, SerializerInterface $serializer, EntityManagerInterface $em, FormHandler $formHandler): JsonResponse
+    public function removeUsuarioFromSala(Request $req, EntityManagerInterface $em, SerializerInterface $serializer, SalaRepository $salaRepository): JsonResponse
     {
         $data = json_decode($req->getContent(), true);
 
-        //$usuario = $this->getUser();
+        $usuario = $this->getUser();
+        $salas = $this->getUser()->getSalas();
 
-        //$usuario = $usuarioRepository->findOneBy(["id" => $data->usuario_id]);
-        $usuario = $usuarioRepository->findOneBy(["id" => 1]);
+        $salas = $this->container->get('serializer')->normalize($salas, null, ['groups' => ['sala']]);
+
+        $sala = $this->salaHandler->filterSalasById($salas, $data['sala_id']);
+
+        if ($sala === null) {
+            return new JsonResponse(
+                ["error" => "La sala no exite."],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $sala = $salaRepository->findOneBy(['id' => $data['sala_id']]);
+
+        try {
+            $usuario->removeSala($sala);
+            $em->persist($usuario);
+            $em->flush();
+        } catch (\Throwable $th) {
+            return new JsonResponse(
+                ["error" => "No has podido salir de la sala"],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+
+        return JsonResponse::fromJsonString($serializer->serialize($this->getUser(), 'json', ['groups' => ['usuario']]), Response::HTTP_OK);
+    }
+
+
+    /** 
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * ++++++CREA UNA SALA Y AÑADE AL USUARIO QUE LA HA CREADO+++++++++++++++
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @Route("/salas_usuario/add", name="crear_sala", methods={"POST"} )
+     */
+    public function createSala(Request $req, SerializerInterface $serializer, EntityManagerInterface $em, FormHandler $formHandler): JsonResponse
+    {
+        $data = json_decode($req->getContent(), true);
+
+        $usuario = $this->getUser();
 
         if ($usuario === null) {
             return new JsonResponse(
@@ -96,6 +187,7 @@ class SalaController extends AbstractController
         }
 
         $errors = $formHandler->getErrorsFromForm($form);
+
         return new JsonResponse(
             [
                 "mensaje" => "No se ha podido crear la sala",
@@ -103,30 +195,12 @@ class SalaController extends AbstractController
             ],
             Response::HTTP_BAD_REQUEST
         );
-
-        // try {
-        //     $sala = new Sala();
-        //     $sala->setNombreSala($data->nombre_sala);
-        //     $sala->addUsuario($usuario);
-        //     $usuario->addSala($sala);
-        //     $em = $this->getDoctrine()->getManager();
-        //     $em->persist($sala);
-        //     $em->flush();
-        // $string = (string) $form->getErrors(true, false);
-        // print_r(explode(':', $string)[2]);
-        // print_r($errors);
-        //     return JsonResponse::fromJsonString($serializer->serialize($sala, 'json', ['groups' => ['sala']]), Response::HTTP_CREATED);
-        // } catch (\Throwable $throwable) {
-        // return new JsonResponse(
-        //     [
-        //         "mensaje" => "No se ha podido crear la sala"
-        //     ],
-        //     Response::HTTP_BAD_REQUEST
-        // );
-        // }
     }
 
     /** 
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * ++++++AÑADE UN USUARIO A LA SALA++++++++++++++++++++++++++++++++++++++
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * @Route("/salas_usuario/addUser", name="aniadir_usuario_sala", methods={"PUT"} )
      */
     public function addUsuario(Request $req, UsuarioRepository $usuarioRepository, SalaRepository $salaRepository, SerializerInterface $serializer): JsonResponse
@@ -154,39 +228,6 @@ class SalaController extends AbstractController
         } catch (\Throwable $throwable) {
             return new JsonResponse(
                 ["error" => "No se ha podido añadir el usuario a la sala"],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-    }
-
-    /** 
-     * @Route("/salas_usuario/removeUser", name="eliminar_usuario_sala", methods={"PUT"} )
-     */
-    public function removeUsuario(Request $req, UsuarioRepository $usuarioRepository, SalaRepository $salaRepository, SerializerInterface $serializer): JsonResponse
-    {
-        $data = json_decode($req->getContent());
-
-        $usuario = $usuarioRepository->findOneBy(["id" => $data->usuario_id]);
-
-        if ($usuario === null) {
-            return new JsonResponse(
-                ["error" => "El usuario no existe"],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        try {
-            $sala = $salaRepository->findOneBy(["id" => $data->sala_id]);
-
-            $sala->removeUsuario($usuario);
-            $usuario->removeSala($sala);
-            $em = $this->getDoctrine()->getManager();
-            $em->flush();
-
-            return JsonResponse::fromJsonString($serializer->serialize($sala, 'json', ['groups' => ['sala']]), Response::HTTP_OK);
-        } catch (\Throwable $throwable) {
-            return new JsonResponse(
-                ["error" => "No se ha podido eliminar el usuario a la sala"],
                 Response::HTTP_BAD_REQUEST
             );
         }

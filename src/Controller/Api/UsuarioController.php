@@ -13,11 +13,16 @@ use Symfony\Component\HttpFoundation\Request;
 class UsuarioController extends AbstractController
 {
     /** 
-     * @Route("/update_profile/{user_id}", name="update_profile", methods={"PUT"} )
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * ++++++++++++++++++ACTUALIZA EL PERFIL DEL USUARIO+++++++++++++++++++
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @Route("/update_profile", name="actualizar_perfil", methods={"PUT"} )
      */
     public function updatePerfil(Request $req): JsonResponse
     {
-
+        //TODO FORMULARIO MENOS AVATAR
+        //PROCESAR REQUEST
+        //DEVOLVER PERFIL ACTUALIZADO
         return new JsonResponse('hello');
     }
 }

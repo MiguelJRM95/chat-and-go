@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PerfilRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,31 +20,37 @@ class Perfil
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"usuario"})
      */
     private $nombre;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"usuario"})
      */
     private $apellido_uno;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"usuario"})
      */
     private $apellido_dos;
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
+     * @Groups({"usuario"})
      */
     private $frase_estado;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"usuario"})
      */
     private $avatar;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"usuario"})
      */
     private $direccion;
 

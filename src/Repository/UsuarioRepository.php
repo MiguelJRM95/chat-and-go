@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Mensaje;
 use App\Entity\Usuario;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -64,4 +65,24 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
         ;
     }
     */
+
+    public function findMensajesRecibidosBySala($sala): array
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.mensajes_recibidos', 'mr')
+            ->andWhere('mr.sala = :sala')
+            ->setParameter('sala', $sala)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findMensajesEnviadosBySala($sala): array
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.mensajes_enviados', 'mr')
+            ->andWhere('mr.sala = :sala')
+            ->setParameter('sala', $sala)
+            ->getQuery()
+            ->getResult();
+    }
 }
