@@ -15,6 +15,9 @@ const homePrint = () => {
           `<div style="display: flex; flex-direction: row; justify-content: space-between; margin: 20px; padding-left: 10px; padding-right: 10px;width: 200px; background: #fff; cursor: pointer"><p>ID: ${sala.id}</p><p>Nombre: ${sala.nombre_sala}</p></div>`
         ).appendTo("#salas");
       });
+      if ($("#salas").children().length === 0) {
+        $("<p>Actualmente no estás en ninguna sala</p>").appendTo("#salas");
+      }
     }
   };
 

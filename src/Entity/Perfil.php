@@ -20,37 +20,37 @@ class Perfil
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"usuario"})
+     * @Groups({"usuario", "perfil"})
      */
     private $nombre;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"usuario"})
+     * @Groups({"usuario", "perfil"})
      */
     private $apellido_uno;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"usuario"})
+     * @Groups({"usuario", "perfil"})
      */
     private $apellido_dos;
 
     /**
      * @ORM\Column(type="string", length=150, nullable=true)
-     * @Groups({"usuario"})
+     * @Groups({"usuario", "amigo", "perfil"})
      */
     private $frase_estado;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"usuario"})
+     * @Groups({"usuario", "amigo", "perfil"})
      */
     private $avatar;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"usuario"})
+     * @Groups({"usuario", "perfil"})
      */
     private $direccion;
 

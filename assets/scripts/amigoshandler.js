@@ -1,37 +1,36 @@
 import $ from "jquery";
 
 //++++++++++++++++++++++++++++++++++++++
-// Carga las salas del usuario al hacer login
+// Carga los amigos del usuario
 //+++++++++++++++++++++++++++++++++++++++
 const amigosPrint = () => {
-  let xhr = new XMLHttpRequest();
-
-  xhr.onload = () => {
-    if (xhr.status >= 200 && xhr.status < 300) {
-      const response = JSON.parse(xhr.responseText);
-      $("#salas").empty();
-      response.forEach((sala) => {
+  fetch("http://127.0.0.1:8000/api/amigos", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${
+        JSON.parse(sessionStorage.getItem("usuario")).token
+      }`,
+    },
+  })
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      let finalResponse = Object.keys(data).map((key) => data[key]);
+      $("#amigos").empty();
+      Array.from(finalResponse).forEach((amigo) => {
         $(
-          `<div style="display: flex; flex-direction: row; justify-content: space-between; margin: 20px; padding-left: 10px; padding-right: 10px;width: 200px; background: #fff; cursor: pointer"><p>ID: ${sala.id}</p><p>Nombre: ${sala.nombre_sala}</p></div>`
-        ).appendTo("#salas");
+          `<div style="display: flex; flex-direction: column; justify-content: space-between; margin: 20px; padding-left: 10px; padding-right: 10px;width: 170px; background: #fff; cursor: pointer"><img src='${
+            amigo.perfil.avatar
+          }'><p>Nickname: <br> ${amigo.username}</p><p>Frase de estado: <br>"${
+            amigo.perfil.frase_estado || "Sin estado"
+          }"</p></div>`
+        ).appendTo("#amigos");
       });
-    }
-  };
-
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 401) {
-      //$("<p>No </p>").insertAfter("#login");
-      console.log("no se han podido cargar las salas");
-    }
-  };
-
-  xhr.open("GET", "http://127.0.0.1:8000/api/salas_usuario");
-  xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
-  xhr.setRequestHeader(
-    "Authorization",
-    `Bearer ${JSON.parse(sessionStorage.getItem("usuario")).token}`
-  );
-  xhr.send();
+      if ($("#amigos").children().length === 0) {
+        $("<p>Actualmente no tienes amigos</p>").appendTo("#amigos");
+      }
+    });
 };
 
 export { amigosPrint };

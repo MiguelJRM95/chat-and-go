@@ -15,7 +15,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
-use Throwable;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 
 /**
  * @Route("/api", name="api_")
@@ -29,7 +31,20 @@ class RegisterController extends AbstractController
         $this->registerHandler = $registerHandler;
     }
 
-    /** 
+    /**
+     * @OA\Response(
+     *     response=201,
+     *     description="Devuelve el usuario creado y envia email a su correo",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Usuario::class, groups={"usuario"}))
+     *     )
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Lanza error si el usuario ya se ha creado o no ha podido loguearse",
+     * )
+     * @OA\Tag(name="registro")
      * @Route("/alta", name="nuevo_usuario", methods={"POST"} )
      */
     public function altaUsuario(Request $req, UsuarioRepository $usuarioRepository, FormHandler $formHandler, SerializerInterface $serializer, EntityManagerInterface $em): JsonResponse
@@ -77,7 +92,16 @@ class RegisterController extends AbstractController
         return $response;
     }
 
-    /** 
+    /**
+     * @OA\Response(
+     *     response=301,
+     *     description="Valida la cuenta del usuario y redirige a home",
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Lanza error si el usuario no existe",
+     * )
+     * @OA\Tag(name="registro")
      * @Route("/alta", name="activar_usuario", methods={"GET"})
      */
     public function activarUsuario(Request $req, UsuarioRepository $usuarioRepository, EntityManagerInterface $em): Response

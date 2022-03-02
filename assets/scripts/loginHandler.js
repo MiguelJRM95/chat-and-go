@@ -5,7 +5,6 @@ const checkSession = () => {
   if (!sessionStorage.getItem("usuario")) {
     return false;
   }
-
   return true;
 };
 
@@ -19,12 +18,21 @@ const loginRequest = (data) => {
       sessionStorage.setItem("usuario", JSON.stringify(response));
       $("#login-container").fadeOut();
       homePrint();
+      if (JSON.parse(sessionStorage.getItem("usuario")).verificado === false) {
+        $("#Perfil").toggle();
+        $(
+          "<p>Mientras no verifiques tu cuenta no tendrás acceso a tu perfil</p>"
+        ).insertBefore("header");
+      }
     }
   };
 
   xhr.onreadystatechange = () => {
     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 401) {
-      $("<p>Usuario o contraseña incorrectos</p>").insertAfter("#login");
+      $("#login").next().remove("p");
+      $("<p id='error'>Usuario o contraseña incorrectos</p>").insertAfter(
+        "#login"
+      );
     }
   };
 

@@ -14,13 +14,15 @@ import "./styles/app.css";
 import { Router } from "./controllers/router";
 import { PATHS } from "./constants/routes";
 import { homePrint } from "./scripts/homeHandler";
+import { amigosPrint } from "./scripts/amigoshandler";
+import { perfilPrint } from "./scripts/perfilHandler";
+import { apiPrint } from "./scripts/apiHandler";
 
 const ROUTER = new Router(PATHS);
 
 let home = document.getElementById("Home");
 let amigos = document.getElementById("Amigos");
 let peticiones = document.getElementById("Peticiones");
-let salas = document.getElementById("Salas");
 let perfil = document.getElementById("Perfil");
 let api = document.getElementById("Api");
 
@@ -31,22 +33,24 @@ home.onclick = () => {
 
 amigos.onclick = () => {
   ROUTER.load("amigos");
+  amigosPrint();
 };
 
 peticiones.onclick = () => {
   ROUTER.load("peticiones");
 };
 
-salas.onclick = () => {
-  ROUTER.load("salas");
-};
-
 perfil.onclick = () => {
   ROUTER.load("perfil");
+  perfilPrint();
 };
 
 api.onclick = () => {
   ROUTER.load("api");
+  apiPrint();
 };
 
 homePrint();
+amigosPrint();
+perfilPrint();
+apiPrint();

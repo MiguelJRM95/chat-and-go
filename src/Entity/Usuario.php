@@ -24,7 +24,7 @@ class Usuario implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"usuario","sala", "mensaje", "mensaje_recibido","mensaje_enviado"})
+     * @Groups({"usuario","sala", "mensaje", "mensaje_recibido","mensaje_enviado", "amigo"})
      */
     private $username;
 
@@ -81,7 +81,7 @@ class Usuario implements UserInterface
     /**
      * @ORM\OneToOne(targetEntity=Perfil::class, orphanRemoval=true)
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"usuario"})
+     * @Groups({"usuario", "amigo"})
      */
     private $perfil;
 

@@ -16,6 +16,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
+use OpenApi\Annotations as OA;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
 
 /**
  * @Route("/api", name="sala_api_")
@@ -33,6 +36,20 @@ class SalaController extends AbstractController
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * ++++++LISTA TODAS LAS SALAS (solo admin)++++++++++++++++++++++++++++++
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     *  @OA\Response(
+     *     response=200,
+     *     description="Devuelve una lista con todas las salas de la app, solo admins",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Sala::class, groups={"sala"}))
+     *     )
+     * )
+     * @OA\Response(
+     *     response=403,
+     *     description="Lanza error si no se es administrador",
+     * )
+     * @OA\Tag(name="sala")
+     * @Security(name="Bearer")
      * @Route("/salas", name="salas", methods={"GET"})
      */
     public function salasAll(SalaRepository $salaRepository, SerializerInterface $serializer): JsonResponse
@@ -59,6 +76,20 @@ class SalaController extends AbstractController
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * ++++++LISTA LAS SALAS A LAS CUALES PERTENECE EL USUARIO LOGEADO+++++++
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     *  @OA\Response(
+     *     response=200,
+     *     description="Devuelve una lista con todas las salas a las cuales pertenece el usuario",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Sala::class, groups={"sala"}))
+     *     )
+     * )
+     * @OA\Response(
+     *     response=403,
+     *     description="Lanza error si no exite el usuario",
+     * )
+     * @OA\Tag(name="sala")
+     * @Security(name="Bearer")
      * @Route("/salas_usuario", name="salas_usuario", methods={"GET"})
      */
     public function salas(SerializerInterface $serializer): JsonResponse
@@ -77,6 +108,20 @@ class SalaController extends AbstractController
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * ++++++ELIMINA UNA SALA (solo admin)+++++++++++++++++++++++++++++++++++
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @OA\Response(
+     *     response=200,
+     *     description="Elimina una sala, solo admins",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Sala::class, groups={"sala"}))
+     *     )
+     * )
+     * @OA\Response(
+     *     response=403,
+     *     description="Lanza error si no se es administrador",
+     * )
+     * @OA\Tag(name="sala")
+     * @Security(name="Bearer")
      * @Route("/salas_usuario/{sala_id}", name="eliminar_sala", methods={"DELETE"}, requirements={"sala_id"="\d+"} )
      */
     public function removeSala(Request $req, SalaRepository $salaRepository): JsonResponse
@@ -114,6 +159,20 @@ class SalaController extends AbstractController
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * ++++++ELIMINA EL USUARIO LOGUEADO DE LA SALA++++++++++++++++++++++++++
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @OA\Response(
+     *     response=200,
+     *     description="Devuelve los datos del usuario",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Usuario::class, groups={"usuario"}))
+     *     )
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Lanza error si no se puede sacar al usuario de la sala",
+     * )
+     * @OA\Tag(name="sala")
+     * @Security(name="Bearer")
      * @Route("/salas_usuario/remove", name="eliminar_from_sala", methods={"PUT"})
      */
     public function removeUsuarioFromSala(Request $req, EntityManagerInterface $em, SerializerInterface $serializer, SalaRepository $salaRepository): JsonResponse
@@ -156,6 +215,20 @@ class SalaController extends AbstractController
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * ++++++CREA UNA SALA Y AÑADE AL USUARIO QUE LA HA CREADO+++++++++++++++
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @OA\Response(
+     *     response=201,
+     *     description="Devuelve la sala creada",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Sala::class, groups={"sala"}))
+     *     )
+     * )
+     * @OA\Response(
+     *     response=400,
+     *     description="Lanza error si no se puede crear",
+     * )
+     * @OA\Tag(name="sala")
+     * @Security(name="Bearer")
      * @Route("/salas_usuario/add", name="crear_sala", methods={"POST"} )
      */
     public function createSala(Request $req, SerializerInterface $serializer, EntityManagerInterface $em, FormHandler $formHandler): JsonResponse
@@ -200,6 +273,20 @@ class SalaController extends AbstractController
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * ++++++AÑADE UN USUARIO A LA SALA++++++++++++++++++++++++++++++++++++++
      * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @OA\Response(
+     *     response=200,
+     *     description="Devuelve los datos de la sala",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Sala::class, groups={"sala"}))
+     *     )
+     * )
+     * @OA\Response(
+     *     response=403,
+     *     description="Lanza error si no se puede agregar al usuario a la sala",
+     * )
+     * @OA\Tag(name="sala")
+     * @Security(name="Bearer")
      * @Route("/salas_usuario/addUser", name="aniadir_usuario_sala", methods={"PUT"} )
      */
     public function addUsuario(Request $req, UsuarioRepository $usuarioRepository, SalaRepository $salaRepository, SerializerInterface $serializer): JsonResponse

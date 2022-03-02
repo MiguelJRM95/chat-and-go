@@ -16,6 +16,7 @@ class JWTAuthenticationSuccessListener extends AbstractController
 
         $payload['state'] = $user->getIsActive();
         $payload['username'] = $user->getUsername();
+        $payload['verificado'] = $user->getIsActive();
         $payload['perfil'] = array(
             'nombre' => $user->getPerfil()->getNombre(),
             'apellido_uno' => $user->getPerfil()->getApellidoUno(),

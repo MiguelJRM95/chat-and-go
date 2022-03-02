@@ -17,7 +17,7 @@ security:
       security: false
 
     register:
-      pattern: ^/api/alta
+      pattern: ^/api/(alta|doc|doc.json)
       anonymous: lazy
 
     login:
@@ -44,6 +44,8 @@ security:
   # Note: Only the *first* access control that matches will be used
   access_control:
     - { path: ^/api/alta, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/doc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/dpc.json, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
     # - { path: ^/admin, roles: ROLE_ADMIN }
