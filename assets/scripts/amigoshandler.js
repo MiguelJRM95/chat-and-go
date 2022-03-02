@@ -34,4 +34,4 @@ const amigosPrint = () => {
   xhr.send();
 };
 
-export { homePrint };
+export { amigosPrint };
