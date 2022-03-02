@@ -3,9 +3,7 @@ const PATHS = {
     path: "/",
     template: `
             <h1>🏠 Home</h1>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum harum aliquam reiciendis dignissimos? Perferendis consequuntur vitae fugiat fuga neque ipsum?</p>
-            <img src="https://source.unsplash.com/random/400x300" alt="Random Image">
-            <button class="pressable">Click</button>
+            <div id="salas" style="display: row"></div>
         `,
   },
   amigos: {

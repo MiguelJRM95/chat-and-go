@@ -13,6 +13,7 @@ import "./styles/app.css";
 
 import { Router } from "./controllers/router";
 import { PATHS } from "./constants/routes";
+import { homePrint } from "./scripts/homeHandler";
 
 const ROUTER = new Router(PATHS);
 
@@ -25,6 +26,7 @@ let api = document.getElementById("Api");
 
 home.onclick = () => {
   ROUTER.load("home");
+  homePrint();
 };
 
 amigos.onclick = () => {
@@ -46,3 +48,5 @@ perfil.onclick = () => {
 api.onclick = () => {
   ROUTER.load("api");
 };
+
+homePrint();

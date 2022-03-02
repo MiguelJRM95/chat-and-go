@@ -1,10 +1,10 @@
 import $ from "jquery";
+import { homePrint } from "../scripts/homeHandler";
 
 $(document).on("click", ".pressable", () => {
   console.log("hello");
 });
 
 $("#content").on("DOMSubtreeModified", () => {
-  console.log("cargada");
-  // console.log(sessionStorage.getItem("usuario"));
+  //homePrint();
 });

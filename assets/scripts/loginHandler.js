@@ -1,4 +1,5 @@
 import $ from "jquery";
+import { homePrint } from "../scripts/homeHandler";
 
 const checkSession = () => {
   if (!sessionStorage.getItem("usuario")) {
@@ -16,10 +17,8 @@ const loginRequest = (data) => {
     if (xhr.status >= 200 && xhr.status < 300) {
       const response = JSON.parse(xhr.responseText);
       sessionStorage.setItem("usuario", JSON.stringify(response));
-      $("#login-container")
-        .fadeOut()
-        .promise()
-        .then(() => console.log(sessionStorage.getItem("usuario")));
+      $("#login-container").fadeOut();
+      homePrint();
     }
   };
 
