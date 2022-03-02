@@ -3,9 +3,6 @@ import { checkSession, loginRequest } from "../scripts/loginHandler";
 import { registro } from "../templates/registro";
 import { login } from "../templates/login";
 
-sessionStorage.removeItem("usuario");
-//console.log(sessionStorage.getItem("usuario"));
-
 if (!checkSession()) {
   $(login).appendTo("body");
 }
@@ -33,4 +30,8 @@ $(document).on("click", "#login", (e) => {
 $(document).on("click", "#registro", (e) => {
   e.preventDefault();
   console.log("ok");
+});
+
+$(document).on("animationend", "#login-container", () => {
+  console.log("jejejej");
 });

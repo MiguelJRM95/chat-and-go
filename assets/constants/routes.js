@@ -8,18 +8,34 @@ const PATHS = {
             <button class="pressable">Click</button>
         `,
   },
-  about: {
-    path: "/about",
+  amigos: {
+    path: "/amigos",
     template: `
-            <h1>👩🏻‍💻 Sobre mi</h1>
+            <h1>Amigos</h1>
             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum harum aliquam reiciendis dignissimos? Perferendis consequuntur vitae fugiat fuga neque ipsum?</p>
             <img src="https://source.unsplash.com/random/500x400" alt="Random Image">
         `,
   },
-  contact: {
-    path: "/contact",
+  peticiones: {
+    path: "/peticiones",
     template: `
-            <h1>📱 Contacto</h1>
+            <h1>📱 Peticiones</h1>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum harum aliquam reiciendis dignissimos? Perferendis consequuntur vitae fugiat fuga neque ipsum?</p>
+            <img src="https://source.unsplash.com/random/600x500" alt="Random Image">
+        `,
+  },
+  salas: {
+    path: "/salas",
+    template: `
+            <h1>📱 Salas</h1>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum harum aliquam reiciendis dignissimos? Perferendis consequuntur vitae fugiat fuga neque ipsum?</p>
+            <img src="https://source.unsplash.com/random/600x500" alt="Random Image">
+        `,
+  },
+  error: {
+    path: "/error",
+    template: `
+            <h1>Error 404</h1>
             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum harum aliquam reiciendis dignissimos? Perferendis consequuntur vitae fugiat fuga neque ipsum?</p>
             <img src="https://source.unsplash.com/random/600x500" alt="Random Image">
         `,

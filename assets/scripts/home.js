@@ -6,4 +6,5 @@ $(document).on("click", ".pressable", () => {
 
 $("#content").on("DOMSubtreeModified", () => {
   console.log("cargada");
+  // console.log(sessionStorage.getItem("usuario"));
 });

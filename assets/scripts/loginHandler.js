@@ -8,15 +8,18 @@ const checkSession = () => {
   return true;
 };
 
+//CREAR FUNCIONES LLENADO DE SECCIONES
 const loginRequest = (data) => {
   let xhr = new XMLHttpRequest();
 
   xhr.onload = () => {
     if (xhr.status >= 200 && xhr.status < 300) {
       const response = JSON.parse(xhr.responseText);
-      //console.log(response);
       sessionStorage.setItem("usuario", JSON.stringify(response));
-      $("#login-container").fadeOut();
+      $("#login-container")
+        .fadeOut()
+        .promise()
+        .then(() => console.log(sessionStorage.getItem("usuario")));
     }
   };
 

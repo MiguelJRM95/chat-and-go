@@ -60,30 +60,56 @@ button:active {
   box-shadow: 0px 1px 0px 0px #cd1313;
 }
 
-#About {
+#Amigos {
   background-color: #608ef0;
   box-shadow: 0px 3px 0px 0px #1364cd;
 }
 
-#About:hover {
+#Amigos:hover {
   background-color: #449bed;
 }
 
-#About:active {
+#Amigos:active {
   box-shadow: 0px 1px 0px 0px #1364cd;
 }
 
-#Contact {
+#Peticiones {
   background-color: #78f060;
   box-shadow: 0px 3px 0px 0px #13cd1c;
 }
 
-#Contact:hover {
+#Peticiones:hover {
   background-color: #60ed44;
 }
 
-#Contact:active {
+#Peticiones:active {
   box-shadow: 0px 1px 0px 0px #13cd23;
+}
+
+#Salas {
+  background-color: #3ca7c2;
+  box-shadow: 0px 3px 0px 0px #1356b9;
+}
+
+#Salas:hover {
+  background-color: #3284d1;
+}
+
+#Salas:active {
+  box-shadow: 0px 1px 0px 0px #1364cd;
+}
+
+#Logout {
+  background-color: #4b5a5e;
+  box-shadow: 0px 3px 0px 0px #3b3c3f;
+}
+
+#Logout:hover {
+  background-color: #212224;
+}
+
+#Logout:active {
+  box-shadow: 0px 1px 0px 0px #1c2229;
 }
 
 #content {

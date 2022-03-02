@@ -17,17 +17,22 @@ import { PATHS } from "./constants/routes";
 const ROUTER = new Router(PATHS);
 
 let home = document.getElementById("Home");
-let about = document.getElementById("About");
-let contact = document.getElementById("Contact");
+let amigos = document.getElementById("Amigos");
+let peticiones = document.getElementById("Peticiones");
+let salas = document.getElementById("Salas");
 
 home.onclick = () => {
   ROUTER.load("home");
 };
 
-about.onclick = () => {
-  ROUTER.load("about");
+amigos.onclick = () => {
+  ROUTER.load("amigos");
 };
 
-contact.onclick = () => {
-  ROUTER.load("contact");
+peticiones.onclick = () => {
+  ROUTER.load("peticiones");
+};
+
+salas.onclick = () => {
+  ROUTER.load("salas");
 };
