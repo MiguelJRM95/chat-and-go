@@ -32,6 +32,22 @@ const PATHS = {
             <img src="https://source.unsplash.com/random/600x500" alt="Random Image">
         `,
   },
+  perfil: {
+    path: "/perfil",
+    template: `
+            <h1>📱 Perfil</h1>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum harum aliquam reiciendis dignissimos? Perferendis consequuntur vitae fugiat fuga neque ipsum?</p>
+            <img src="https://source.unsplash.com/random/600x500" alt="Random Image">
+        `,
+  },
+  api: {
+    path: "/api",
+    template: `
+            <h1>📱 Api</h1>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum harum aliquam reiciendis dignissimos? Perferendis consequuntur vitae fugiat fuga neque ipsum?</p>
+            <img src="https://source.unsplash.com/random/600x500" alt="Random Image">
+        `,
+  },
   error: {
     path: "/error",
     template: `

@@ -99,6 +99,19 @@ button:active {
   box-shadow: 0px 1px 0px 0px #1364cd;
 }
 
+#Perfil {
+  background-color: #8cc72d;
+  box-shadow: 0px 3px 0px 0px #528622;
+}
+
+#Perfil:hover {
+  background-color: #3a9b37;
+}
+
+#Perfil:active {
+  box-shadow: 0px 1px 0px 0px #6ac55e;
+}
+
 #Logout {
   background-color: #4b5a5e;
   box-shadow: 0px 3px 0px 0px #3b3c3f;

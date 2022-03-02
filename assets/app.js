@@ -20,6 +20,8 @@ let home = document.getElementById("Home");
 let amigos = document.getElementById("Amigos");
 let peticiones = document.getElementById("Peticiones");
 let salas = document.getElementById("Salas");
+let perfil = document.getElementById("Perfil");
+let api = document.getElementById("Api");
 
 home.onclick = () => {
   ROUTER.load("home");
@@ -35,4 +37,12 @@ peticiones.onclick = () => {
 
 salas.onclick = () => {
   ROUTER.load("salas");
+};
+
+perfil.onclick = () => {
+  ROUTER.load("perfil");
+};
+
+api.onclick = () => {
+  ROUTER.load("api");
 };
