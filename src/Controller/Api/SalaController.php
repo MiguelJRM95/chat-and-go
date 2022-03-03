@@ -293,7 +293,7 @@ class SalaController extends AbstractController
     {
         $data = json_decode($req->getContent());
 
-        $usuario = $usuarioRepository->findOneBy(["id" => $data->usuario_id]);
+        $usuario = $usuarioRepository->findOneBy(["username" => $data->username]);
 
         if ($usuario === null) {
             return new JsonResponse(

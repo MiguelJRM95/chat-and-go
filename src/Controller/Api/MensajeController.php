@@ -6,6 +6,9 @@ use App\Entity\Mensaje;
 use App\Repository\MensajeRepository;
 use App\Repository\SalaRepository;
 use App\Repository\UsuarioRepository;
+use DateTime;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -218,9 +221,57 @@ class MensajeController extends AbstractController
      * @Security(name="Bearer")
      * @Route("/send_message", name="enviar_mensaje", methods={"POST"} )
      */
-    public function enviarMensaje(SerializerInterface $serializer): JsonResponse
+    public function enviarMensaje(Request $req, SerializerInterface $serializer, SalaRepository $salaRepository, UsuarioRepository $usuarioRepository, EntityManagerInterface $em): JsonResponse
     {
-        $mensajesEnviados = $this->getUser()->getMensajesEnviados();
-        return JsonResponse::fromJsonString($serializer->serialize($mensajesEnviados, 'json', ['groups' => ['mensaje']]), Response::HTTP_OK);
+        //contenido
+        $data = json_decode($req->getContent(), true);
+        $user = $this->getUser();
+        $usuario = $this->getUser()->getUsername();
+        print_r($usuario);
+        print_r($data);
+        $fechaEnMilis = $data['fecha'];
+
+
+
+
+        $sala = $salaRepository->findOneBy(['id' => $data['sala_id']]);
+
+        $usuariosRec = json_decode($serializer->serialize($sala->getUsuarios(), 'json', ['groups' => ['nombre']]), true);
+
+        $usernameRec = '';
+
+        foreach ($usuariosRec as $usuarioIn) {
+            if ($usuarioIn['username'] !== $usuario) {
+                $usernameRec = $usuarioIn['username'];
+            }
+        }
+
+
+        $usuarioRec = $usuarioRepository->findOneBy(['username' => $usernameRec]);
+
+
+
+        $mensaje = new Mensaje();
+        $mensaje->setContenido($data['contenido']);
+        $mensaje->setSala($sala);
+        $mensaje->setTipo('texto');
+        $mensaje->setFecha($fechaEnMilis);
+        $mensaje->setUsuarioEmisor($user);
+        $mensaje->setUsuarioReceptor($usuarioRec);
+
+        $user->addMensajesEnviado($mensaje);
+        $usuarioRec->addMensajesRecibido($mensaje);
+
+        $sala->addMensaje($mensaje);
+
+        $em->persist($mensaje);
+        $em->persist($user);
+        $em->persist($usuarioRec);
+        $em->persist($sala);
+
+        $em->flush();
+
+
+        return JsonResponse::fromJsonString($serializer->serialize($mensaje, 'json', ['groups' => ['mensaje']]), Response::HTTP_OK);
     }
 }

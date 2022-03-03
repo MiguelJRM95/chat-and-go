@@ -18,7 +18,6 @@ const perfilPrint = () => {
     .then(function (data) {
       let finalResponse = Object.keys(data).map((key) => data[key]);
       $("#amigos").empty();
-      console.log(finalResponse[1]);
       $(
         `<div style="display: flex; flex-direction: column; justify-content: space-between; margin: 20px; padding-left: 10px; padding: 10px;width: 170px; background: #fff; cursor: pointer">
             <img src='${finalResponse[1]}'>

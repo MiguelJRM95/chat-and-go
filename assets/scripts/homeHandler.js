@@ -1,4 +1,5 @@
 import $ from "jquery";
+import { addUserSala } from "./addUserSala";
 import { mensajesSalaPrint } from "./mensajesSalaHandler";
 
 //++++++++++++++++++++++++++++++++++++++
@@ -23,7 +24,7 @@ const homePrint = () => {
           `<div style="display: flex; flex-direction: row; justify-content: space-between; margin: 20px; padding-left: 10px; padding-right: 10px;width: 200px; background: #fff; cursor: pointer" class='sala'><p>ID: ${sala.id}</p><p>Nombre: ${sala.nombre_sala}</p></div>
           <form id='añadir_usuario_form' style="margin: 8px;">
               <input style='height: 30px;' type='text' placeholder='Introduce el nombre del usuario' id='usuario_input_${sala.id}'>
-              <button style="background: coral; margin: 0;padding: 3px; color: #fff; font-weight: bold; height: 35px;" id='nuevo_usuario_button'>Añadir Usuario</button>
+              <button style="background: coral; margin: 0;padding: 3px; color: #fff; font-weight: bold; height: 35px;" class='nuevo_usuario_button' value='${sala.id}'>Añadir Usuario</button>
             </form>
           `
         ).appendTo("#salas");
@@ -48,6 +49,7 @@ const homePrint = () => {
       //+++++++++++++++++++++++++++++++++++++
       //MUESTRA MENSAJES+++++++++++++++++++++
       //+++++++++++++++++++++++++++++++++++++
+
       data.forEach((sala) => {
         fetch("http://127.0.0.1:8000/api/messages_by_sala", {
           method: "POST",
@@ -67,20 +69,43 @@ const homePrint = () => {
             //+++++++++++++++++++++++++++++++++++++
             //ORDENO MENSAJES+++++++++++++++++++++
             //+++++++++++++++++++++++++++++++++++++
-            let finalResponse = Object.keys(data)
-              .map((key) => data[key])
-              .reverse();
+            let finalResponse = Object.keys(data).map((key) => data[key]);
+            //+++++++++++++++++++++++++++++++++++++
+            //AÑADE USUARIOS++++++++++++++++++++++
+            //++++++++++++++++++++++++++++++++++++
+            Array.from($(".nuevo_usuario_button")).forEach((button) => {
+              $(button).on("click", function (e) {
+                addUserSala(
+                  $(button).val(),
+                  $(`#usuario_input_${sala.id}`).val()
+                );
+              });
+            });
             //+++++++++++++++++++++++++++++++++++++
             //INSERTO LOS MENSAJES EN LOS CHATS+++++++++++++++++++++
             //+++++++++++++++++++++++++++++++++++++
+            $(`#${sala.id}`).empty();
+            let mensajePrev;
             finalResponse.forEach((mensaje) => {
+              //+++++++++++++++++++++++++++++++++++++
+              //ELIMINO DUPLICADOS+++++++++++++++++++++
+              //+++++++++++++++++++++++++++++++++++++
+              if (mensajePrev === mensaje.contenido) {
+                return;
+              }
+              let fecha = new Date(mensaje.fecha);
+              fecha = fecha.toUTCString();
+              mensajePrev = mensaje.contenido;
+              console.log(
+                JSON.parse(sessionStorage.getItem("usuario")).username
+              );
               if (
                 mensaje.usuario ===
                 JSON.parse(sessionStorage.getItem("usuario")).username
               ) {
                 $(`
                 <div style='border: 2px solid black; width:fit-content; align-self: flex-end; padding: 8px; margin: 0.7em'>
-                  <span>Fecha: ${mensaje.fecha}</span>
+                  <span>Fecha: ${fecha}</span>
                   <br>
                   <p>${mensaje.contenido}</p>
                   <p>Usuario: ${mensaje.usuario}</p>
@@ -89,7 +114,7 @@ const homePrint = () => {
               } else {
                 $(`
                 <div style='border: 2px solid black; width:fit-content; align-self: flex-start; padding: 8px; margin: 0.7em'>
-                  <span>Fecha: ${mensaje.fecha}</span>
+                  <span>Fecha: ${fecha}</span>
                   <br>
                   <p>${mensaje.contenido}</p>
                   <p>Usuario: ${mensaje.usuario}</p>
@@ -102,16 +127,32 @@ const homePrint = () => {
       return data;
     })
     .then((data) => {
-      console.log(data);
-      console.log($(".mensaje_button"));
       data.forEach((sala) => {
-        console.log(sala.id);
         $(`#enviar_mensaje_button_${sala.id}`).on("click", function (e) {
           e.preventDefault();
 
           console.log(this.id.split("_")[3]);
           console.log($(`#mensaje_input_2`));
           console.log($(`#mensaje_input_${this.id.split("_")[3]}`).val());
+          fetch("http://127.0.0.1:8000/api/send_message", {
+            method: "POST",
+            body: JSON.stringify({
+              contenido: $(`#mensaje_input_${this.id.split("_")[3]}`).val(),
+              sala_id: this.id.split("_")[3],
+              fecha: Date.now(),
+            }),
+            headers: {
+              Authorization: `Bearer ${
+                JSON.parse(sessionStorage.getItem("usuario")).token
+              }`,
+            },
+          })
+            .then(function (response) {
+              return response.text();
+            })
+            .then(function (data) {
+              console.log(data);
+            });
         });
       });
       //++++++++++++++++++++++++++++++++++++++++++

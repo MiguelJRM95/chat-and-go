@@ -1,5 +1,6 @@
 import $ from "jquery";
 import { crearSala } from "./crearSala";
+import { homePrint } from "./homeHandler";
 
 $(document).on("click", "#nueva_sala", () => {
   $("#nueva_sala_form").toggle();
@@ -40,4 +41,20 @@ $(document).on("click", "#guardar", () => {
   $("#cancelar").prop("id", "editar");
   $("#editar").text("Editar Perfil");
   console.log("cambios hechos");
+});
+
+const refrescarChat = () => {
+  return window.setInterval(() => {
+    homePrint();
+  }, 2000);
+};
+
+let intervalId;
+
+$(document).on("click", ".sala", () => {
+  intervalId = refrescarChat();
+});
+
+$(document).on("mouseover", ".sala", () => {
+  clearInterval(intervalId);
 });

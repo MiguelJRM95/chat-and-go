@@ -24,7 +24,7 @@ class Usuario implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"usuario","sala", "mensaje", "mensaje_recibido","mensaje_enviado", "amigo"})
+     * @Groups({"usuario","sala", "mensaje", "mensaje_recibido","mensaje_enviado", "amigo", "nombre"})
      */
     private $username;
 

@@ -47,6 +47,7 @@ Encore
   .addEntry("home", "./assets/scripts/home.js")
   .addEntry("login", "./assets/controllers/login.js")
   .addEntry("logout", "./assets/controllers/logout.js")
+  .addEntry("refresher", "./assets/controllers/salaRefresher.js")
 
   /*
    * FEATURE CONFIG
