@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/api", name="mensaje_api_")
@@ -148,6 +149,53 @@ class MensajeController extends AbstractController
         $mensajes = $usuarioRepository->findMensajesEnviadosBySala($sala);
 
         return JsonResponse::fromJsonString($serializer->serialize($mensajes, 'json', ['groups' => ['mensaje_enviado']]), Response::HTTP_OK);
+    }
+
+    /** 
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * +++++LISTA LOS MENSAJES DE LA SALA++++++++++++++++++++++++++++++++++++
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * @OA\Response(
+     *     response=200,
+     *     description="Devuelve los mensajes de la sala",
+     *     @OA\JsonContent(
+     *        type="array",
+     *        @OA\Items(ref=@Model(type=Mensaje::class, groups={"mensaje"}))
+     *     )
+     * )
+     * @OA\Tag(name="mensaje")
+     * @Security(name="Bearer")
+     * @Route("/messages_by_sala", name="mensajes_enviados_sala", methods={"POST"} )
+     */
+    public function mensajesAllSala(Request $req, SerializerInterface $serializer, UsuarioRepository $usuarioRepository, SalaRepository $salaRepository): JsonResponse
+    {
+        $data = json_decode($req->getContent(), true);
+        // print_r($data);
+        // die;
+        $sala = $salaRepository->findOneBy(['id' => $data['sala_id']]);
+
+        $mensajes = $sala->getMensajes();
+
+        $arrayMensajes = json_decode($serializer->serialize($mensajes, 'json', ['groups' => ['mensaje']]), true);
+
+        $mensajesChat = [];
+        foreach ($arrayMensajes as $mensaje) {
+            array_push($mensajesChat, [
+                'fecha' => intval(implode(explode('/', $mensaje['fecha']))),
+                'contenido' => $mensaje['contenido'],
+                'usuario' => $mensaje['usuario_emisor']['username']
+            ]);
+            array_push($mensajesChat, [
+                'fecha' => intval(implode(explode('/', $mensaje['fecha'])) - 1),
+                'contenido' => $mensaje['contenido'],
+                'usuario' => $mensaje['usuario_emisor']['username']
+            ]);
+        }
+
+        asort($mensajesChat);
+        $response = new JsonResponse($mensajesChat, Response::HTTP_OK);
+        $response->setEncodingOptions(JSON_PRETTY_PRINT);
+        return $response;
     }
 
     /** 

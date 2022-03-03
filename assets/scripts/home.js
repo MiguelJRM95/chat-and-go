@@ -1,4 +1,5 @@
 import $ from "jquery";
+import { crearSala } from "./crearSala";
 
 $(document).on("click", "#nueva_sala", () => {
   $("#nueva_sala_form").toggle();
@@ -10,6 +11,9 @@ $(document).on("click", " #nuevo_amigo", () => {
 
 $(document).on("click", "#nueva_sala_button", (e) => {
   e.preventDefault();
+  if ($(sala_input).val() !== "") {
+    crearSala($(sala_input).val());
+  }
 });
 
 $(document).on("click", "#nuevo_amigo_button", (e) => {

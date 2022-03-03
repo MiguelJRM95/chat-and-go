@@ -5,7 +5,7 @@ const PATHS = {
             <h1>🏠 Salas</h1>
             <button id='nueva_sala'>Nueva Sala</button>
             <form id='nueva_sala_form' style="display: none; margin: 8px;">
-              <input style='height: 30px;' type='text' placeholder='Introduce el nombre de la sala'>
+              <input style='height: 30px;' type='text' placeholder='Introduce el nombre de la sala' id='sala_input'>
               <button style="background: coral; margin: 0;padding: 3px; color: #fff; font-weight: bold; height: 35px; width: 30px" id='nueva_sala_button'>+</button>
             </form>
             <div id="salas" style="display: row"></div>
