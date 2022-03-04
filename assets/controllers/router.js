@@ -18,8 +18,13 @@ class Router {
     const {
       location: { pathname = "/" },
     } = window;
-    const URI = pathname === "/" ? "home" : pathname.replace("/", "");
-    this.load(URI);
+    if (!this.checkSession) {
+      const URI = pathname === "/" ? "home" : pathname.replace("/", "");
+      this.load(URI);
+    } else {
+      const URI = pathname === "/" ? "login" : pathname.replace("/", "");
+      this.load(URI);
+    }
   }
 
   /**
@@ -29,10 +34,26 @@ class Router {
    */
   load(page = "home") {
     const { paths } = this;
-    const { path, template } = paths[page] || paths.error;
-    const $CONTAINER = document.querySelector("#content");
-    $CONTAINER.innerHTML = template;
-    window.history.pushState({}, "Genial", path);
+    console.log(this);
+    console.log(page);
+    if (!this.checkSession) {
+      const { path, template } = paths[login] || paths.error;
+      const $CONTAINER = document.querySelector("#content");
+      $CONTAINER.innerHTML = template;
+      window.history.pushState({}, "Genial", path);
+    } else {
+      const { path, template } = paths[page] || paths.error;
+      const $CONTAINER = document.querySelector("#content");
+      $CONTAINER.innerHTML = template;
+      window.history.pushState({}, "Genial", path);
+    }
+  }
+
+  checkSession() {
+    if (sessionStorage.getItem("usuario")) {
+      return true;
+    }
+    return false;
   }
 }
 

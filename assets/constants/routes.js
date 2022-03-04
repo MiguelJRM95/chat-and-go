@@ -1,4 +1,56 @@
 const PATHS = {
+  login: {
+    path: "/login",
+    template: `
+        <div id='login-container'>
+            <div id='form-container'>
+                <p>Inicia Sesion</p>
+                <form class='myform'>
+                    <div>
+                        <label>Username</label>
+                        <input type='text' name='username'/>
+                    </div>
+                    <div>
+                        <label>Contraseña</label>
+                        <input type='password' name='password'/>
+                    </div>
+                    <button id='login'>Login</button>
+                </form>
+                <a href='#' class='form-link'>Registrarse</a>
+            </div>
+        </div>
+        `,
+  },
+  registro: {
+    path: "/registro",
+    template: `
+          <div id='login-container'>
+              <div id='form-container'>
+                  <p>Registro</p>
+                  <form>
+                      <div>
+                          <label>Username</label>
+                          <input type='text' name='username'/>
+                      </div>
+                      <div>
+                          <label>Contraseña</label>
+                          <input type='password' name='password'/>
+                      </div>
+                      <div>
+                          <label>Repite Contraseña</label>
+                          <input type='password' name='repassword'/>
+                      </div>
+                      <div>
+                          <label>Email</label>
+                          <input type='email' name='email'/>
+                      </div>
+                      <button id='registro'>Sign Up</button>
+                  </form>
+                  <a href='#' class='form-link'>Iniciar Sesión</a>
+              </div>
+          </div>
+          `,
+  },
   home: {
     path: "/",
     template: `

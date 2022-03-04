@@ -11,12 +11,9 @@ import "./styles/app.css";
 // start the Stimulus application
 //import "./bootstrap";
 
+import $ from "jquery";
 import { Router } from "./controllers/router";
 import { PATHS } from "./constants/routes";
-import { homePrint } from "./scripts/homeHandler";
-import { amigosPrint } from "./scripts/amigoshandler";
-import { perfilPrint } from "./scripts/perfilHandler";
-import { apiPrint } from "./scripts/apiHandler";
 
 const ROUTER = new Router(PATHS);
 
@@ -28,12 +25,11 @@ let api = document.getElementById("Api");
 
 home.onclick = () => {
   ROUTER.load("home");
-  homePrint();
 };
 
 amigos.onclick = () => {
   ROUTER.load("amigos");
-  amigosPrint();
+  // amigosPrint();
 };
 
 peticiones.onclick = () => {
@@ -42,15 +38,10 @@ peticiones.onclick = () => {
 
 perfil.onclick = () => {
   ROUTER.load("perfil");
-  perfilPrint();
+  //perfilPrint();
 };
 
 api.onclick = () => {
   ROUTER.load("api");
-  apiPrint();
+  // apiPrint();
 };
-
-homePrint();
-amigosPrint();
-perfilPrint();
-apiPrint();

@@ -44,10 +44,6 @@ Encore
   // will require an extra script tag for runtime.js
   // but, you probably want this, unless you're building a single-page app
   .enableSingleRuntimeChunk()
-  .addEntry("home", "./assets/scripts/home.js")
-  .addEntry("login", "./assets/controllers/login.js")
-  .addEntry("logout", "./assets/controllers/logout.js")
-  .addEntry("refresher", "./assets/controllers/salaRefresher.js")
 
   /*
    * FEATURE CONFIG
